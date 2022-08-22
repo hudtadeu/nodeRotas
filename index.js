@@ -35,6 +35,50 @@ app.get("/testParam/:id", (req, res) => {
   res.send(req.params.id);
 });
 
+//parametros via query
+app.get("/testQuery", (req, res) => {
+  res.send(req.query);
+});
+
+//next
+app.get("/testMultipleHandlers", (req,res, next) => {
+  console.log("Callback 1");
+  next();
+}, (req, res) => {
+  console.log("Callback 2");
+  res.end();
+});
+
+//next com array
+const callback1 = (req, res,next) => {
+  console.log("Callback 1");
+  next();
+};
+
+const callback2 = (req, res, next) => {
+  console.log("Callback 2");
+  next();
+};
+
+const callback3 = (req, res) => {
+  console.log("Callback 3");
+  res.end();
+};
+
+app.get("/testMultipleHandlersArray", [callback1, callback2, callback3]);
+
+//route
+app.route("/testRoute")
+  .get((req, res) => {
+    res.send("/testRoute GET");
+  })
+  .post((req, res) => {
+    res.send("/testRoute POST");
+  })
+  .delete((req, res) => {
+    res.send("/testRoute DELETE");
+  });
+
 app.listen(3000, () => {
   console.log("API Started!");
 });
